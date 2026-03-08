@@ -1,5 +1,7 @@
 package com.prasanth.oims.service.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Cacheable(value = "productById", key ="#productId")
     public ProductResponseDTO getProductById(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(()-> new IllegalStateException("Product not found"));
         return convertToResponseDTO(product);
@@ -27,6 +30,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "productById", allEntries = true)
     public ProductResponseDTO addProduct(ProductRequestDTO productRequestDTO) {
         Product saveProduct = productRepository.save(convertToEntity(new Product(),productRequestDTO));
         return convertToResponseDTO(saveProduct); 
@@ -34,6 +38,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "productById", allEntries = true)
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(()-> new IllegalStateException("Product not found"));
         productRepository.delete(product);
@@ -41,6 +46,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "productById", allEntries = true)
     public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productRequestDTO) {
         Product existingProduct = productRepository.findById(productId).orElseThrow(()-> new IllegalStateException("Product not found"));
         Product product =productRepository.save(convertToEntity(existingProduct,productRequestDTO));
@@ -49,6 +55,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Cacheable(value = "allProducts", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<ProductResponseDTO> getAllProducts(Pageable pageable) {
         Page<Product> products=productRepository.findAll(pageable);
         Page<ProductResponseDTO> responseDTOs = products.map(product -> {
