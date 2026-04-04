@@ -61,7 +61,7 @@ public class OrderController {
         Authentication authentication) 
     {
         Long userId = Long.valueOf(authentication.getName());
-        return ResponseEntity.ok(orderService.getMyOrderById(userId, userId));
+        return ResponseEntity.ok(orderService.getMyOrderById(orderId, userId));
     }
 
 
