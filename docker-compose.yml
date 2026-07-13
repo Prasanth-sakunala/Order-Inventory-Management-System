@@ -1,0 +1,42 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: oims-mysql
+    environment:
+      MYSQL_DATABASE: oims_db
+      MYSQL_ROOT_PASSWORD: root123$
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot123$ --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: oims-redis
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    container_name: oims-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/oims_db
+      DB_USERNAME: root
+      DB_PASSWORD: root123$
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8081:8080"
+
+volumes:
+  mysql_data:

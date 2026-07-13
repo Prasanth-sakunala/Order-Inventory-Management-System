@@ -1,0 +1,26 @@
+target/
+.git/
+.gitignore
+.idea/
+.vscode/
+*.iml
+*.log
+*.class
+*.jar
+*.war
+*.ear
+*.tmp
+*.temp
+build/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven wrapper output if any
+.mvn/wrapper/maven-wrapper.jar
+
+# Local environment files
+.env
+.env.*

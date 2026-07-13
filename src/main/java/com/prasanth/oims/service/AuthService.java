@@ -4,6 +4,6 @@ import com.prasanth.oims.dto.LoginRequest;
 import com.prasanth.oims.dto.RegisterRequest;
 
 public interface AuthService {
-    String register(RegisterRequest request);
+    String register(RegisterRequest request, boolean isAdmin);
     String login(LoginRequest request);
 }

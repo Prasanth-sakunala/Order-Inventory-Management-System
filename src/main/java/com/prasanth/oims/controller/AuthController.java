@@ -1,5 +1,6 @@
 package com.prasanth.oims.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,18 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(summary = "Register a new admin",security = {})
+    @PostMapping("/register/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String registerAdmin(@RequestBody @Valid RegisterRequest request){
+        String response = authService.register(request, true);
+        return response;
+    }
+
     @Operation(summary = "Register a new user",security = {})
     @PostMapping("/register")
     public String register(@RequestBody @Valid RegisterRequest request){
-        String response = authService.register(request);
+        String response = authService.register(request, false);
         return response;
     }
 

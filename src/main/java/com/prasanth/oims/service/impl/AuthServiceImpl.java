@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public String register(RegisterRequest request) {
+    public String register(RegisterRequest request, boolean isAdmin) {
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new IllegalStateException("Email already registered");
         }
@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setRole(Role.USER);
+        newUser.setRole(isAdmin ? Role.ADMIN : Role.USER);
         newUser.setCreatedAt(LocalDateTime.now());
         userRepository.save(newUser);
 
