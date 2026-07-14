@@ -34,14 +34,14 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**").permitAll()
-            .requestMatchers("/orders/**").authenticated()
             .requestMatchers("/products/**").permitAll()
             .requestMatchers(
                 "/swagger-ui.html",
                 "/swagger-ui/**",
                 "/v3/api-docs/**").permitAll()
-            .anyRequest().authenticated()
             .requestMatchers("/actuator/health").permitAll()
+            .requestMatchers("/orders/**").authenticated()
+            .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
