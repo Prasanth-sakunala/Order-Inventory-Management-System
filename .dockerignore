@@ -21,6 +21,3 @@ Thumbs.db
 # Maven wrapper output if any
 .mvn/wrapper/maven-wrapper.jar
 
-# Local environment files
-.env
-.env.*
