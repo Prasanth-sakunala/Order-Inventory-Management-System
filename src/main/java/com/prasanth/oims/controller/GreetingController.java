@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/greeting")
 public class GreetingController {
 
-    @RequestMapping
+    @RequestMapping("/")
     public String greet() {
         return "Hello, welcome to the OIMS application!";
     }   
